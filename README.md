@@ -1,4 +1,6 @@
-# .dotfiles
+<img width="1917" height="1080" alt="image" src="https://github.com/user-attachments/assets/ae86182a-83f8-438f-bc12-e89fa7e19a1c" />
+
+# dotfiles
 
 My personal Linux environment, configuration, and setup files.
 
