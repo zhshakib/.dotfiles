@@ -1,0 +1,120 @@
+# ============================================================
+# Starship
+# Clean two-line prompt
+# ============================================================
+format = """
+$username$hostname \
+$directory\
+$git_branch\
+$git_status\
+$git_commit\
+$python\
+$line_break\
+$character
+"""
+[username]
+show_always = true
+style_user = "bold italic green"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "bold italic red"
+format = "@[$hostname]($style) "
+
+# ============================================================
+# Directory
+# ============================================================
+
+[directory]
+style = "bold cyan"
+truncation_length = 1
+truncation_symbol = ""
+
+
+# ============================================================
+# Git branch
+# ============================================================
+
+[git_branch]
+format = " on [$symbol$branch]($style)"
+symbol = " "
+style = "bold purple"
+
+
+# ============================================================
+# Git status
+# ============================================================
+
+[git_status]
+format = " [$all_status$ahead_behind]($style)"
+style = "bold yellow"
+
+conflicted = "⚡"
+untracked = "?"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+
+# ============================================================
+# Git commit
+# ============================================================
+
+[git_commit]
+format = " [$hash]($style)"
+style = "dimmed white"
+commit_hash_length = 7
+only_detached = false
+
+
+# ============================================================
+# Python
+# ============================================================
+
+[python]
+format = " [$symbol$version]($style)"
+symbol = "🐍 "
+style = "bold green"
+
+
+# ============================================================
+# Node.js
+# ============================================================
+
+[nodejs]
+format = " [$symbol$version]($style)"
+symbol = "⬢ "
+style = "bold green"
+disabled = true
+
+
+# ============================================================
+# Rust
+# ============================================================
+
+[rust]
+format = " [$symbol$version]($style)"
+symbol = "🦀 "
+style = "bold red"
+
+
+# ============================================================
+# Go
+# ============================================================
+
+[golang]
+format = " [Go $version]($style)"
+style = "bold cyan"
+
+# ============================================================
+# Prompt character
+# ============================================================
+
+[character]
+success_symbol = "[❯](bold green) "
+error_symbol = "[❯](bold red) "
