@@ -1,143 +1,56 @@
 #!/usr/bin/env bash
+#
+# sync.sh — repo-root orchestrator
+#
+set -euo pipefail
 
-# ============================================================
-# Dotfiles Sync
-# Sync live configuration files into ~/dotfiles
-# ============================================================
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-set -u
+# Ensure every sync script (including this one) is executable
+find "$REPO_DIR" -maxdepth 2 -type f -name 'sync.sh' -exec chmod +x {} +
 
-# ------------------------------------------------------------
-# Paths
-# ------------------------------------------------------------
-
-DOTFILES_DIR="$HOME/dotfiles"
-
-FILES=(
-    "$HOME/.zshrc|$DOTFILES_DIR/terminal/.zshrc"
-    "$HOME/.config/starship.toml|$DOTFILES_DIR/terminal/starship.toml"
-    "$HOME/.local/share/konsole/Starship.colorscheme|$DOTFILES_DIR/terminal/Starship.colorscheme"
+# List of subfolders that have their own sync.sh
+SUBSYNC_DIRS=(
+  DE
+  terminal
+  # apps
+  # system
 )
 
-# ------------------------------------------------------------
-# Colors
-# ------------------------------------------------------------
+echo "🔄 Syncing dotfiles → $REPO_DIR"
+echo
 
-RESET='\033[0m'
-BOLD='\033[1m'
+failures=0
 
-GREEN='\033[32m'
-YELLOW='\033[33m'
-RED='\033[31m'
-BLUE='\033[34m'
-CYAN='\033[36m'
-DIM='\033[2m'
+for dir in "${SUBSYNC_DIRS[@]}"; do
+  script="$REPO_DIR/$dir/sync.sh"
 
-# ------------------------------------------------------------
-# Counters
-# ------------------------------------------------------------
+  if [[ ! -f "$script" ]]; then
+    echo "⏭  skip: $dir/ (no sync.sh)"
+    continue
+  fi
 
-CHECKED=0
-UPDATED=0
-UNCHANGED=0
-MISSING=0
+  if [[ ! -x "$script" ]]; then
+    chmod +x "$script"
+  fi
 
-# ------------------------------------------------------------
-# Helpers
-# ------------------------------------------------------------
-
-print_header() {
-    echo
-    printf "${BOLD}${CYAN}Dotfiles sync${RESET}\n"
-    printf "${DIM}────────────────────────────────────────${RESET}\n"
-}
-
-sync_file() {
-    local source="$1"
-    local destination="$2"
-
-    ((CHECKED++))
-
-    # Source file doesn't exist
-    if [[ ! -f "$source" ]]; then
-        printf "${RED}✗${RESET} %-25s ${DIM}source not found${RESET}\n" \
-            "$(basename "$source")"
-
-        ((MISSING++))
-        return
-    fi
-
-    # Create destination directory if necessary
-    mkdir -p "$(dirname "$destination")"
-
-    # Destination doesn't exist
-    if [[ ! -f "$destination" ]]; then
-        cp "$source" "$destination"
-
-        printf "${BLUE}↑${RESET} %-25s ${BLUE}added${RESET}\n" \
-            "$(basename "$source")"
-
-        ((UPDATED++))
-        return
-    fi
-
-    # Files are identical
-    if cmp -s "$source" "$destination"; then
-        printf "${GREEN}✓${RESET} %-25s ${DIM}unchanged${RESET}\n" \
-            "$(basename "$source")"
-
-        ((UNCHANGED++))
-        return
-    fi
-
-    # Files differ
-    cp "$source" "$destination"
-
-    printf "${YELLOW}↑${RESET} %-25s ${YELLOW}updated${RESET}\n" \
-        "$(basename "$source")"
-
-    ((UPDATED++))
-}
-
-# ------------------------------------------------------------
-# Start
-# ------------------------------------------------------------
-
-print_header
-
-for entry in "${FILES[@]}"; do
-    IFS='|' read -r source destination <<< "$entry"
-    sync_file "$source" "$destination"
+  echo "▶ $dir"
+  if ! "$script"; then
+    echo "❌ $dir failed"
+    failures=$((failures + 1))
+  fi
+  echo
 done
 
-# ------------------------------------------------------------
-# Summary
-# ------------------------------------------------------------
+if [[ $failures -gt 0 ]]; then
+  echo "⚠️  $failures sub-sync(s) failed"
+  exit 1
+fi
 
+echo "✅ all syncs complete"
 echo
-printf "${DIM}────────────────────────────────────────${RESET}\n"
-
-printf "${BOLD}%d${RESET} files checked\n" "$CHECKED"
-
-if ((UPDATED > 0)); then
-    printf "${YELLOW}%d${RESET} file(s) updated\n" "$UPDATED"
-fi
-
-if ((UNCHANGED > 0)); then
-    printf "${GREEN}%d${RESET} file(s) unchanged\n" "$UNCHANGED"
-fi
-
-if ((MISSING > 0)); then
-    printf "${RED}%d${RESET} source file(s) missing\n" "$MISSING"
-fi
-
-echo
-
-if ((UPDATED > 0)); then
-    printf "${DIM}Review changes with:${RESET}\n"
-    printf "  git -C \"$DOTFILES_DIR\" diff\n"
-else
-    printf "${GREEN}Everything is already in sync.${RESET}\n"
-fi
-
-echo
+echo "Next:"
+echo "  git add ."
+echo "  git diff --cached --stat"
+echo "  git commit -m 'sync: update dotfiles'"
+echo "  git push"
