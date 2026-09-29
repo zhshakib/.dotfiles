@@ -1,0 +1,32 @@
+{
+    "editor.fontSize": 18,
+    "workbench.colorTheme": "Catppuccin Mocha",
+    "editor.fontFamily": "Victor Mono",
+    "editor.fontLigatures": true,
+    "editor.fontWeight": "400",
+
+    "editor.tokenColorCustomizations": {
+    "[Catppuccin Mocha]": {
+        "textMateRules": [
+            {
+                "scope": [
+                    "keyword",
+                    "storage.type",
+                    "storage.modifier"
+                ],
+                "settings": {
+                    "fontStyle": "italic"
+                }
+            }
+        ]
+    }
+},
+"window.titleBarStyle": "native",
+"window.menuBarVisibility": "toggle",
+"workbench.sideBar.location": "right",
+"workbench.browser.showInTitleBar": false,
+"chat.titleBar.openInAgentsWindow.enabled": false,
+"workbench.navigationControl.enabled": false,
+"workbench.layoutControl.enabled": false,
+"window.customTitleBarVisibility": "never"
+}

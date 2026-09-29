@@ -13,7 +13,7 @@ find "$REPO_DIR" -maxdepth 2 -type f -name 'sync.sh' -exec chmod +x {} +
 SUBSYNC_DIRS=(
   DE
   terminal
-  # apps
+  apps
   # system
 )
 

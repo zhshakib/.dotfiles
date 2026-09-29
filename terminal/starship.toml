@@ -2,6 +2,9 @@
 # Starship
 # Clean two-line prompt
 # ============================================================
+
+add_newline = false
+
 format = """
 $username$hostname \
 $directory\
