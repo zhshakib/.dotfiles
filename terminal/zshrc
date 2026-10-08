@@ -107,3 +107,4 @@ eval "$(starship init zsh)"
 
 # Created by `pipx` on 2026-09-29 01:57:48
 export PATH="$PATH:/home/noobzh/.local/bin"
+export PATH="$PATH:$HOME/.config/composer/vendor/bin"

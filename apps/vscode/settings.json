@@ -1,6 +1,5 @@
 {
     "editor.fontSize": 18,
-    "workbench.colorTheme": "Catppuccin Mocha",
     "editor.fontFamily": "Victor Mono",
     "editor.fontLigatures": true,
     "editor.fontWeight": "400",
@@ -28,5 +27,5 @@
 "chat.titleBar.openInAgentsWindow.enabled": false,
 "workbench.navigationControl.enabled": false,
 "workbench.layoutControl.enabled": false,
-"window.customTitleBarVisibility": "never"
+"window.customTitleBarVisibility": "auto"
 }

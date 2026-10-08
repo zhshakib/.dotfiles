@@ -5,6 +5,7 @@ Font=JetBrains Mono,14,-1,5,400,0,0,0,0,0,0,0,0,0,0,1,,0,0
 
 [General]
 Command=/bin/zsh
+Icon=configure-debian
 Name=Sweet
 Parent=FALLBACK/
 ShowTerminalSizeHint=true
